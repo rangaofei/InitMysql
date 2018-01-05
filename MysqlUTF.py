@@ -39,7 +39,7 @@ def findMysqld(file_object, data):
 
 
 def correct():
-    f = open('Test.txt', 'r+')
+    f = open('/etc/mysql/mysql.conf.d/mysqld.cnf', 'r+')
     try:
         all_text = f.read()
         findMysqld(f, all_text)
