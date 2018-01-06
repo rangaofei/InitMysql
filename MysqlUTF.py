@@ -1,5 +1,8 @@
 import datetime
 import platform
+import os
+
+from subprocess import Popen, PIPE
 
 mysqld = "[mysqld]"
 client = "[client]"
@@ -55,11 +58,17 @@ def correct():
         f.close()
 
 
+def show_mysql_info():
+    print_message(Popen("which mysql", stdout=PIPE, shell=True).stdout.read())
+
+
 def judge_platform():
     sys = platform.uname().system.lower()
     if sys.find("ubuntu") < 0:
+        show_mysql_info()
         print_message('Your system is %s,current not support!!!' % sys)
     else:
+        print_message('Your system is %s ,supported!!!' % sys)
         correct()
 
 
