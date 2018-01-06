@@ -1,3 +1,6 @@
+import datetime
+import platform
+
 mysqld = "[mysqld]"
 client = "[client]"
 mysql = "[mysql]"
@@ -5,46 +8,59 @@ server_charset = "character-set-server=utf8"
 client_charset = "default-character-set=utf8"
 
 
+def print_message(msg):
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print('[%s]:%s' % (time, msg))
+
+
 def backup_file(file_object, data):
-    print('back up your file to %s.bak_bak...' % file_object)
+    print_message('back up your file to %s.bak_bak...' % file_object)
     f = open(file_object.name + '.bak_bak', 'w')
     name = f.name
     f.writelines(data)
     f.flush()
     f.close()
-    print('back up your file success,you can open find it : %s' % name)
+    print_message('back up your file success,you can open find it : %s' % name)
 
 
-def findMysqld(file_object, data):
+def find_mysqld(file_object, data):
     if data.find(mysqld) < 0:
         backup_file(file_object, data)
-        print("prepare write into file...")
+        print_message("prepare write into file...")
         file_object.write(data)
         file_object.write('\n')
         file_object.write(mysqld)
         file_object.write('\n')
         file_object.writelines(server_charset)
         file_object.flush()
-        print("write file success...")
+        print_message("write file success...")
     elif data.find(server_charset) < 0:
-        backup_file(file_object,data)
-        print("prepare write into file...")
-        file_object.seek(0,0)
+        backup_file(file_object, data)
+        print_message("prepare write into file...")
+        file_object.seek(0, 0)
         str = data.replace(mysqld, mysqld + '\n' + server_charset)
         file_object.writelines(str)
         file_object.flush()
-        print("write file success...")
+        print_message("write file success...")
     else:
-        print("you have already write server_char_set...")
+        print_message("you have already write server_char_set...")
 
 
 def correct():
     f = open('/etc/mysql/mysql.conf.d/mysqld.cnf', 'r+')
     try:
         all_text = f.read()
-        findMysqld(f, all_text)
+        find_mysqld(f, all_text)
     finally:
         f.close()
 
 
-correct()
+def judge_platform():
+    sys = platform.uname().system.lower()
+    if sys.find("ubuntu") < 0:
+        print_message('Your system is %s,current not support!!!' % sys)
+    else:
+        correct()
+
+
+judge_platform()
