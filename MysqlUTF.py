@@ -1,7 +1,7 @@
 import datetime
 import platform
 import os
-
+import Logo
 from subprocess import Popen, PIPE
 
 mysqld = "[mysqld]"
@@ -91,5 +91,5 @@ def judge_platform():
         print_message('Your system is %s ,supported!!!' % sys)
         where_is_conf(False)
 
-
+Logo
 judge_platform()
