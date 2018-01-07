@@ -1,5 +1,9 @@
 
 # 解决ubuntu下mysql中文乱码的问题
+现在支持大部分linux设备，ubuntu和centos测试通过，macos也测试通过
+
+有问题可以直接联系我
+
 1. 使用wget或者curl均可
 ```
 wget https://raw.githubusercontent.com/rgf456/InitMysql/master/MysqlUTF.py
@@ -19,3 +23,4 @@ Your system is $your sys$,current not support!!!
 debian:sudo service mysql restart
 centOS:sudo service mysqld restart
 ```
+macos下可以自己重启mysql

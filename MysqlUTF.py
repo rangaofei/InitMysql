@@ -16,7 +16,7 @@ def print_message(msg):
     print('[%s]:%s' % (time, msg))
 
 
-def backup_file(file_object, data):
+def backup_original_file(file_object, data):
     print_message('back up your file to %s.bak_bak...' % file_object)
     f = open(file_object.name + '.bak_bak', 'w')
     name = f.name
@@ -26,9 +26,9 @@ def backup_file(file_object, data):
     print_message('back up your file success,you can open find it : %s' % name)
 
 
-def find_mysqld(file_object, data):
+def replace_charset(file_object, data):
     if data.find(mysqld) < 0:
-        backup_file(file_object, data)
+        backup_original_file(file_object, data)
         print_message("prepare write into file...")
         file_object.write(data)
         file_object.write('\n')
@@ -38,7 +38,7 @@ def find_mysqld(file_object, data):
         file_object.flush()
         print_message("write file success...")
     elif data.find(server_charset) < 0:
-        backup_file(file_object, data)
+        backup_original_file(file_object, data)
         print_message("prepare write into file...")
         file_object.seek(0, 0)
         str = data.replace(mysqld, mysqld + '\n' + server_charset)
@@ -49,23 +49,29 @@ def find_mysqld(file_object, data):
         print_message("you have already write server_char_set...")
 
 
-def where_is_conf():
+def where_is_conf(create_file):
     filename = r'/etc/my.cnf'
     if os.path.exists(filename):
         print_message('find %s ,prepare to fix...' % filename)
-        file_path='/etc/my.cnf'
+        file_path = '/etc/my.cnf'
         correct(file_path)
     else:
-        print_message('not find %s file,prepaer to find another file')
-        file_path='/etc/mysql/mysql.conf.d/mysqld.cnf'
-        correct(file_path)
+        if create_file:
+            file = '/etc/my.cnf'
+            f = open(file, 'w')
+            f.close()
+            correct(file)
+        else:
+            print_message('not find %s file,prepare to find another file')
+            file_path = '/etc/mysql/mysql.conf.d/mysqld.cnf'
+            correct(file_path)
 
 
 def correct(file_path):
     f = open(file_path, 'r+')
     try:
         all_text = f.read()
-        find_mysqld(f, all_text)
+        replace_charset(f, all_text)
     finally:
         f.close()
 
@@ -76,11 +82,14 @@ def show_mysql_info():
 
 def judge_platform():
     sys = platform.uname().system.lower()
-    if sys.find("ubuntu") < 0 and sys.find("linux") < 0:
+    if sys.find('darwin') >= 0:
+        print_message('Your system is %s ,supported!!!' % sys)
+        where_is_conf(True)
+    elif sys.find("ubuntu") < 0 and sys.find("linux") < 0:
         print_message('Your system is %s,current not support!!!' % sys)
     else:
         print_message('Your system is %s ,supported!!!' % sys)
-        where_is_conf()
+        where_is_conf(False)
 
 
 judge_platform()
