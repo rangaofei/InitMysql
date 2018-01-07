@@ -53,9 +53,8 @@ def where_is_conf():
     filename = r'/etc/my.cnf'
     if os.path.exists(filename):
         print_message('find %s ,prepare to fix...' % filename)
-        file_path='etc/my.cnf'
+        file_path='/etc/my.cnf'
         correct(file_path)
-        correct()
     else:
         print_message('not find %s file,prepaer to find another file')
         file_path='/etc/mysql/mysql.conf.d/mysqld.cnf'
@@ -77,7 +76,7 @@ def show_mysql_info():
 
 def judge_platform():
     sys = platform.uname().system.lower()
-    if sys.find("ubuntu") < 0 and sys.find("centos") < 0:
+    if sys.find("ubuntu") < 0 and sys.find("linux") < 0:
         print_message('Your system is %s,current not support!!!' % sys)
     else:
         print_message('Your system is %s ,supported!!!' % sys)
