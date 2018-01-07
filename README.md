@@ -16,5 +16,6 @@ Your system is $your sys$,current not support!!!
 
 3. 然后写入文件中
 ```shell
-sudo service mysql restart
+debian:sudo service mysql restart
+centOS:sudo service mysqld restart
 ```
