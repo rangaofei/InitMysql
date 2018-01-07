@@ -49,6 +49,15 @@ def find_mysqld(file_object, data):
         print_message("you have already write server_char_set...")
 
 
+def where_is_conf():
+    filename = r'/etc/my.cnf'
+    if os.path.exists(filename):
+        print_message('find %s ,prepare to fix...' % filename)
+    else:
+        print_message('not find %s file,prepaer to find another file')
+        correct()
+
+
 def correct():
     f = open('/etc/mysql/mysql.conf.d/mysqld.cnf', 'r+')
     try:
@@ -64,12 +73,11 @@ def show_mysql_info():
 
 def judge_platform():
     sys = platform.uname().system.lower()
-    if sys.find("ubuntu") < 0:
-        show_mysql_info()
+    if sys.find("ubuntu") < 0 and sys.find("centos") < 0:
         print_message('Your system is %s,current not support!!!' % sys)
     else:
         print_message('Your system is %s ,supported!!!' % sys)
-        correct()
+        where_is_conf()
 
 
 judge_platform()
