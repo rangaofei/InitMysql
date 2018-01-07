@@ -53,13 +53,17 @@ def where_is_conf():
     filename = r'/etc/my.cnf'
     if os.path.exists(filename):
         print_message('find %s ,prepare to fix...' % filename)
+        file_path='etc/my.cnf'
+        correct(file_path)
+        correct()
     else:
         print_message('not find %s file,prepaer to find another file')
-        correct()
+        file_path='/etc/mysql/mysql.conf.d/mysqld.cnf'
+        correct(file_path)
 
 
-def correct():
-    f = open('/etc/mysql/mysql.conf.d/mysqld.cnf', 'r+')
+def correct(file_path):
+    f = open(file_path, 'r+')
     try:
         all_text = f.read()
         find_mysqld(f, all_text)
