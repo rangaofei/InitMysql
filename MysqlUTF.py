@@ -1,4 +1,3 @@
-import datetime
 import platform
 import os
 from Logo import print_logo, print_message
@@ -12,7 +11,7 @@ client_charset = "default-character-set=utf8"
 
 
 def backup_original_file(file_object, data):
-    print_message('back up your file to %s.bak_bak...' % file_object)
+    print_message('back up your file to %s.bak_bak...' % file_object.name)
     f = open(file_object.name + '.bak_bak', 'w')
     name = f.name
     f.writelines(data)
@@ -56,10 +55,6 @@ def where_is_conf(create_file):
             f = open(file, 'w')
             f.close()
             correct(file)
-        else:
-            print_message('not find %s file,prepare to find another file'%filename)
-            file_path = '/etc/mysql/mysql.conf.d/mysqld.cnf'
-            correct(file_path)
 
 
 def correct(file_path):
@@ -71,21 +66,35 @@ def correct(file_path):
         f.close()
 
 
-def show_mysql_info():
-    print_message(Popen("which mysql", stdout=PIPE, shell=True).stdout.read())
+def fix_ubuntu():
+    file_path = '/etc/mysql/mysql.conf.d/mysqld.cnf'
+    correct(file_path)
 
 
+def print_sys(sys_name):
+    print_message('Your system is \"%s\" ' % sys_name)
+
+
+# 判断平台，假如是osx，则会自动寻找/etc/my.cnf文件
 def judge_platform():
-    sys = platform.uname().system.lower()
+    print_message('Looking for your System Version...')
+    sys = platform.uname().version.lower()
     if sys.find('darwin') >= 0:
-        print_message('Your system is %s ,supported!!!' % sys)
+        print_sys('Darwin')
         where_is_conf(True)
-    elif sys.find("ubuntu") < 0 and sys.find("linux") < 0:
-        print_message('Your system is %s,current not support!!!' % sys)
+    elif sys.find('ubuntu') >= 0:
+        print_sys('Ubuntu')
+        fix_ubuntu()
+    elif sys.find('centos') >= 0:
+        print_sys('CentOS')
+        where_is_conf(True)
     else:
-        print_message('Your system is %s ,supported!!!' % sys)
-        where_is_conf(False)
+        print_message('Your system is %s,current not supported!!!' % platform.system())
 
 
-print_logo()
-judge_platform()
+def start_set_mysql_charset():
+    print_logo()
+    judge_platform()
+
+
+start_set_mysql_charset()
