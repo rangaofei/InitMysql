@@ -39,6 +39,7 @@ def replace_charset(file_object, data):
         file_object.writelines(str)
         file_object.flush()
         print_message("write file success...")
+        print_message('you can restart your mysql...')
     else:
         print_message("you have already write server_char_set...")
 
