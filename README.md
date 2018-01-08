@@ -20,7 +20,8 @@ Your system is $your sys$,current not support!!!
 文件存在则会先备份原有的文件为/etc/my.cnf.bak_bak,然后自动在原文件中写入数据
 
 Ubunt则会自动查询`/etc/mysql/mysql.conf.d/mysqld.cnf`,先备份次文件，然后写入数据
-3. 然后写入文件中
+
+3. 重启mysql
 ```shell
 Ubunut: sudo service mysql restart
 CentOS: sudo service mysqld restart
