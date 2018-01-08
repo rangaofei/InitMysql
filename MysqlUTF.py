@@ -1,7 +1,7 @@
 import datetime
 import platform
 import os
-import Logo
+from Logo import print_logo, print_message
 from subprocess import Popen, PIPE
 
 mysqld = "[mysqld]"
@@ -9,11 +9,6 @@ client = "[client]"
 mysql = "[mysql]"
 server_charset = "character-set-server=utf8"
 client_charset = "default-character-set=utf8"
-
-
-def print_message(msg):
-    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print('[%s]:%s' % (time, msg))
 
 
 def backup_original_file(file_object, data):
@@ -62,7 +57,7 @@ def where_is_conf(create_file):
             f.close()
             correct(file)
         else:
-            print_message('not find %s file,prepare to find another file')
+            print_message('not find %s file,prepare to find another file'%filename)
             file_path = '/etc/mysql/mysql.conf.d/mysqld.cnf'
             correct(file_path)
 
@@ -91,5 +86,6 @@ def judge_platform():
         print_message('Your system is %s ,supported!!!' % sys)
         where_is_conf(False)
 
-Logo
+
+print_logo()
 judge_platform()

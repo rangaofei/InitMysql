@@ -24,4 +24,3 @@ def print_logo():
     print_message('|         \\  /         |')
     print_message('|          \\/          |')
     print_message('+----------------------+')
-print_logo()
