@@ -12,7 +12,7 @@ wget https://raw.githubusercontent.com/rgf456/InitMysql/master/MysqlUTF.py
 ```shell
 sudo python3 MysqlUTF.py
 ```
-程序首先判断是否是ubuntu系统，假如不是则输出
+程序首先判断是否可支持的系统，假如不是则输出
 ```
 Your system is $your sys$,current not support!!!
 ```
